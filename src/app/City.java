@@ -52,6 +52,15 @@ class City {
   }
 
   /**
+   * Removes information about the city.
+   * 
+   * @param key
+   */
+  public void removeMeta(String key) {
+    meta.remove(key);
+  }
+
+  /**
    * Get all information about the city.
    * 
    * @return informations about the city

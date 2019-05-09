@@ -7,7 +7,7 @@ import java.util.*;
  * 
  * @param <E> The value type.
  */
-class Node<E> {
+public class Node<E> {
 
   /** Value of the node. */
   private E value;

@@ -5,8 +5,12 @@ import java.nio.file.Paths;
 
 import picocli.CommandLine;
 
+/**
+ * Commandlineutility for creating city graphs.
+ */
 public class App {
     public static void main(String[] args) throws Exception {
+        // parse args with picocli
         AppOptions options = CommandLine.populateCommand(new AppOptions(), args);
 
         if (options.usageHelpRequested) {
@@ -14,13 +18,20 @@ public class App {
             return;
         }
 
+        // if not file is specified, start interactive mode
         if (options.file == null) {
-            startInteractiveMode();
+            new InteractiveMode(System.in);
             return;
         }
         
+        // read tgf file from specified filepath
         String tgf = new String(Files.readAllBytes(Paths.get(options.file.getAbsolutePath())));
-        Graph<City> graph = Graph.<City>fromTrivialGraphFormat(tgf, (String name, String meta) -> parseCity(name, meta));
+
+        // create graph from loaded file
+        Graph<City> graph = Graph.<City>fromTrivialGraphFormat(
+            tgf, 
+            (String name, String meta) -> parseCity(name, meta)
+        );
 
         if(options.outputFormat == OutputFormat.tgf) {
             // generate tgf format
@@ -33,6 +44,13 @@ public class App {
         }
     }
 
+    /**
+     * Create City from custom tgf label format.
+     * 
+     * @param name
+     * @param label
+     * @return City
+     */
     private static City parseCity(String name, String label) {
         City city = new City(name);
 
@@ -45,9 +63,5 @@ public class App {
             city.addMeta(parts[0], parts[1]);
         }
         return city;
-    }
-
-    public static void startInteractiveMode() {
-        System.out.println("Interactive Mode:\n");
     }
 }

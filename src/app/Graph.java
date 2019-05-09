@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
  * 
  * @param <E> The value type.
  */
-class Graph<E> {
+public class Graph<E> {
 
   /** List of nodes in this graph. */
   private ArrayList<Node<E>> vertices = new ArrayList<Node<E>>();
@@ -32,6 +32,21 @@ class Graph<E> {
    */
   public Node<E> getVertex(int index) throws IndexOutOfBoundsException {
     return vertices.get(index);
+  }
+
+  /**
+   * Return the vertex with the given value.
+   * 
+   * @param value value of the vertex to return
+   * @return vertex with the given value
+   */
+  public Node<E> getVertex(E value) {
+    for(Node<E> vertex : vertices) {
+      if(vertex.getValue() == value) {
+        return vertex;
+      }
+    }
+    return null;
   }
 
   /**
