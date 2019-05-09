@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import picocli.CommandLine;
-import picocli.CommandLine.ParameterException;
 
 public class App {
     public static void main(String[] args) throws Exception {
