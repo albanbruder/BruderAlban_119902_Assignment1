@@ -2,6 +2,7 @@ package app;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.BiFunction;
 
 class Graph<E> {
 
@@ -40,11 +41,19 @@ class Graph<E> {
     return vertices;
   }
 
-  public String toGraphviz() {
-    String graphviz = "strict graph {" + "\n";
+  public String toGraphviz(Function<E, String> labelMapper) {
+    String graphviz = "strict graph {" + "\n\n";
+
+    // generate labels
+    for(Node<E> vertex : vertices) {
+      graphviz += "  " + vertices.indexOf(vertex) + " [label=" + labelMapper.apply(vertex.getValue()) + "]\n";
+    }
+
+    graphviz += "\n";
+
     for(Node<E> vertex : getVertices()) {
       for(Node<E> adjecent : vertex.getAdjacents()) {
-        graphviz += "  " + vertex.getValue() + " -- " + adjecent.getValue() + "\n";
+        graphviz += "  " + vertices.indexOf(vertex) + " -- " + vertices.indexOf(adjecent) + "\n";
       }
     }
     graphviz += "}\n";
@@ -65,17 +74,21 @@ class Graph<E> {
     return tgf;
   }
 
-  public static <E> Graph<E> fromTrivialGraphFormat(String tgf, Function<String, E> mapper) {
+  public static <E> Graph<E> fromTrivialGraphFormat(String tgf, BiFunction<String, String, E> mapper) {
     Graph<E> graph = new Graph<E>();
 
     String[] tgfParts = tgf.split("\n#\n");
     String[] nodes = tgfParts[0].split("\n");
     String[] edges = tgfParts[1].split("\n");
 
+    HashMap<String, Node<E>> tmpNodes = new HashMap<String, Node<E>>();
+
     // parse nodes
-    for(String nodeLine : nodes) {
-      String[] nodeParts = nodeLine.split(" ");
-      Node<E> node = new Node<E>(mapper.apply(nodeParts[1]));
+    for(String data : nodes) {
+      String[] dataParts = data.split(" ", 2);
+      String label = dataParts.length == 2 ? dataParts[1] : "";
+      Node<E> node = new Node<E>(mapper.apply(dataParts[0], label));
+      tmpNodes.put(dataParts[0], node);
       graph.addVertex(node);
     }
 
@@ -83,8 +96,8 @@ class Graph<E> {
     for(String edge : edges) {
       String[] edgeParts = edge.split(" ");
       graph.addEdge(
-        graph.getVertex(Integer.parseInt(edgeParts[0])),
-        graph.getVertex(Integer.parseInt(edgeParts[1]))
+        tmpNodes.get(edgeParts[0]),
+        tmpNodes.get(edgeParts[1])
       );
     }
 
