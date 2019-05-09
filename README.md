@@ -19,8 +19,7 @@ You can pass parameters:
 Usage: <main class> [-h] [-i=<file>] [-t=<outputFormat>]
   -h, --help           display this help message
   -i, --input=<file>   a file to convert
-  -t, --type=<outputFormat>
-                       the output format
+  -t, --type=<outputFormat> the output format. Valid values: tgf, graphviz (default: graphviz)
 ```
 This programm will convert graphs that are passed in the TGF format into either graphviz or the TGF format. :D
 ```bash

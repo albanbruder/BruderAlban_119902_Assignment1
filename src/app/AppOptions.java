@@ -15,6 +15,6 @@ public class AppOptions {
     @Option(names = { "-i", "--input" }, description = "a file to convert")
     File file;
 
-    @Option(names = { "-t", "--type" }, description = "the output format")
+    @Option(names = { "-t", "--type" }, description = "the output format. Valid values: ${COMPLETION-CANDIDATES} (default: ${DEFAULT-VALUE})")
     public OutputFormat outputFormat = OutputFormat.graphviz;
 }
