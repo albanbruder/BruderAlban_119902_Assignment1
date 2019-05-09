@@ -4,18 +4,41 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.BiFunction;
 
+/**
+ * A gerneric representation of a graph.
+ * 
+ * @param <E> The value type.
+ */
 class Graph<E> {
 
+  /** List of nodes in this graph. */
   private ArrayList<Node<E>> vertices = new ArrayList<Node<E>>();
 
+  /**
+   * Adds a vertex to the graph.
+   * 
+   * @param vertex
+   */
   public void addVertex(Node<E> vertex) {
     vertices.add(vertex);
   }
 
-  public Node<E> getVertex(int index) {
+  /**
+   * Return the vertex at the specified position.
+   * 
+   * @param index index of the vertex to return
+   * @return the vertex at the specified position
+   * @throws IndexOutOfBoundsException
+   */
+  public Node<E> getVertex(int index) throws IndexOutOfBoundsException {
     return vertices.get(index);
   }
 
+  /**
+   * Removes a vertex from the graph.
+   * 
+   * @param vertex the vertex to remove
+   */
   public void removeVertex(Node<E> vertex) {
     // remove all edges between vertex and his adjacents
     for(Node<E> adjacent : vertex.getAdjacents()) {
@@ -27,20 +50,40 @@ class Graph<E> {
     vertices.remove(vertex);
   }
 
+  /**
+   * Connects vertex a and vertex b.
+   * 
+   * @param a vertex
+   * @param b vertex
+   */
   public void addEdge(Node<E> a, Node<E> b) {
     a.addAdjacent(b);
     b.addAdjacent(a);
   }
 
+  /**
+   * Remove connection between vertex a and vertex b.
+   */
   public void removeEdge(Node<E> a, Node<E> b) {
     a.removeAdjacent(b);
     b.removeAdjacent(a);
   }
 
+  /**
+   * Return all vertices of the graph.
+   * 
+   * @return all vertices of the graph
+   */
   public ArrayList<Node<E>> getVertices() {
     return vertices;
   }
 
+  /**
+   * Returns the graph in the graphviz dot format.
+   * 
+   * @param labelMapper a function that maps <E> to label string
+   * @return graph in the graphviz dot format
+   */
   public String toGraphviz(Function<E, String> labelMapper) {
     String graphviz = "strict graph {" + "\n\n";
 
@@ -60,6 +103,11 @@ class Graph<E> {
     return graphviz;
   }
 
+  /**
+   * Returns the graph in the trivial graph format.
+   * 
+   * @return graph in the trivial graph format
+   */
   public String toTrivialGraphFormat() {
     String tgf = "";
     for(Node<E> vertex : getVertices()) {
@@ -74,6 +122,14 @@ class Graph<E> {
     return tgf;
   }
 
+  /**
+   * Parses a graph in the trivial graph format.
+   * 
+   * @param <E> value type
+   * @param tgf graph in the trivial graph format
+   * @param mapper function that maps tgf id and label to <E>
+   * @return Graph<E>
+   */
   public static <E> Graph<E> fromTrivialGraphFormat(String tgf, BiFunction<String, String, E> mapper) {
     Graph<E> graph = new Graph<E>();
 
