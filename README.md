@@ -32,3 +32,5 @@ This programm will convert graphs that are passed in the TGF format into either 
 # Convert tgf and pipe output to graphviz dot command
 ./start.sh -i ./start.sh -i german-cities.tgf | dot -Tpng > output.png
 ```
+## Graph of German cities
+![output.png](output.png)
